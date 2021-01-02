@@ -98,7 +98,7 @@ echo -e "\e[36m"
 done
 ]])  
 file:close()  
-file = io.open("BK", "w")  
+file = io.open("KA", "w")  
 file:write([[
 #!/usr/bin/env bash
 cd $HOME/KARZMA
