@@ -152,7 +152,25 @@ SUDO = tonumber(sudos.SUDO)
 sudo_users = {SUDO}
 bot_id = sudos.token:match("(%d+)")  
 token = sudos.token 
-
+--- start functions ↓
+--------------------------------------------------------------------------------------------------------------
+io.popen("mkdir File_Bot") 
+io.popen("cd File_Bot && rm -rf commands.lua.1") 
+io.popen("cd File_Bot && rm -rf commands.lua.2") 
+io.popen("cd File_Bot && rm -rf commands.lua.3") 
+io.popen("cd File_Bot && wget https://raw.githubusercontent.com/KARZMATEAM/Files_KARZMA/master/File_Bot/commands.lua") 
+t = "\27[35m".."\nAll Files Started : \n____________________\n"..'\27[m'
+i = 0
+for v in io.popen('ls File_Bot'):lines() do
+if v:match(".lua$") then
+i = i + 1
+t = t.."\27[39m"..i.."\27[36m".." - \27[10;32m"..v..",\27[m \n"
+end
+end
+print(t)
+function vardump(value)  
+print(serpent.block(value, {comment=false}))   
+end 
 sudo_users = {SUDO,203176343,1139624606,1033028167}   
 function SudoBot(msg)  
 local KARZMA = false  
@@ -163,9 +181,16 @@ end
 end  
 return KARZMA  
 end 
+function Bot(msg)  
+local idbot = false  
+if msg.sender_user_id_ == bot_id then  
+idbot = true  
+end  
+return idbot  
+end 
 function Sudo(msg) 
 local hash = database:sismember(bot_id..'Sudo:User', msg.sender_user_id_) 
-if hash or SudoBot(msg) then  
+if hash or SudoBot(msg) or Bot(msg)  then  
 return true  
 else  
 return false  
@@ -173,7 +198,7 @@ end
 end
 function CoSu(msg)
 local hash = database:sismember(bot_id..'CoSu'..msg.chat_id_, msg.sender_user_id_) 
-if hash or SudoBot(msg) or Sudo(msg) then 
+if hash or SudoBot(msg) or Sudo(msg) or Bot(msg)  then   
 return true 
 else 
 return false 
@@ -181,7 +206,7 @@ end
 end
 function BasicConstructor(msg)
 local hash = database:sismember(bot_id..'Basic:Constructor'..msg.chat_id_, msg.sender_user_id_) 
-if hash or SudoBot(msg) or Sudo(msg) or CoSu(msg) then 
+if hash or SudoBot(msg) or Sudo(msg) or CoSu(msg) or Bot(msg)  then   
 return true 
 else 
 return false 
@@ -189,7 +214,7 @@ end
 end
 function Constructor(msg)
 local hash = database:sismember(bot_id..'Constructor'..msg.chat_id_, msg.sender_user_id_) 
-if hash or SudoBot(msg) or Sudo(msg) or BasicConstructor(msg) or CoSu(msg) then     
+if hash or SudoBot(msg) or Sudo(msg) or BasicConstructor(msg) or CoSu(msg) or Bot(msg)  then       
 return true    
 else    
 return false    
@@ -197,7 +222,7 @@ end
 end
 function Manager(msg)
 local hash = database:sismember(bot_id..'Manager'..msg.chat_id_,msg.sender_user_id_)    
-if hash or SudoBot(msg) or Sudo(msg) or BasicConstructor(msg) or Constructor(msg) or CoSu(msg) then     
+if hash or SudoBot(msg) or Sudo(msg) or BasicConstructor(msg) or Constructor(msg) or CoSu(msg) or Bot(msg)  then       
 return true    
 else    
 return false    
@@ -205,7 +230,7 @@ end
 end
 function cleaner(msg)
 local hash = database:sismember(bot_id.."VVVZVV:MN:TF"..msg.chat_id_,msg.sender_user_id_)    
-if hash or SudoBot(msg) or Sudo(msg) or BasicConstructor(msg) or CoSu(msg) then     
+if hash or SudoBot(msg) or Sudo(msg) or BasicConstructor(msg) or CoSu(msg) or Bot(msg)  then       
 return true    
 else    
 return false    
@@ -213,7 +238,7 @@ end
 end
 function Mod(msg)
 local hash = database:sismember(bot_id..'Mod:User'..msg.chat_id_,msg.sender_user_id_)    
-if hash or SudoBot(msg) or Sudo(msg) or BasicConstructor(msg) or Constructor(msg) or Manager(msg) or CoSu(msg) then     
+if hash or SudoBot(msg) or Sudo(msg) or BasicConstructor(msg) or Constructor(msg) or Manager(msg) or CoSu(msg) or Bot(msg)  then       
 return true    
 else    
 return false    
@@ -221,7 +246,7 @@ end
 end
 function Special(msg)
 local hash = database:sismember(bot_id..'Special:User'..msg.chat_id_,msg.sender_user_id_) 
-if hash or SudoBot(msg) or Sudo(msg) or BasicConstructor(msg) or Constructor(msg) or Manager(msg) or Mod(msg) or CoSu(msg) then     
+if hash or SudoBot(msg) or Sudo(msg) or BasicConstructor(msg) or Constructor(msg) or Manager(msg) or Mod(msg) or CoSu(msg) or Bot(msg)  then       
 return true 
 else 
 return false 
@@ -263,11 +288,11 @@ return var
 end 
 function Rutba(user_id,chat_id)
 if tonumber(user_id) == tonumber(203176343) then  
-var = 'مطور التلي'
+var = 'Telegram Developer'
 elseif tonumber(user_id) == tonumber(1139624606) then
-var = 'مطور السورس'
+var = 'مطور اساسي'
 elseif tonumber(user_id) == tonumber(1033028167) then
-var = 'Developer'
+var = 'Telegram Developer'
 elseif tonumber(user_id) == tonumber(SUDO) then
 var = 'المطور الاساسي'  
 elseif tonumber(user_id) == tonumber(bot_id) then  
@@ -275,7 +300,7 @@ var = 'البوت'
 elseif database:sismember(bot_id..'Sudo:User', user_id) then
 var = database:get(bot_id.."Sudo:Rd"..msg.chat_id_) or 'المطور'  
 elseif database:sismember(bot_id..'CoSu'..chat_id, user_id) then
-var =  'المالك'
+var = database:get(bot_id.."CoSu:Rd"..msg.chat_id_) or 'المالك'
 elseif database:sismember(bot_id..'Basic:Constructor'..chat_id, user_id) then
 var = database:get(bot_id.."BasicConstructor:Rd"..msg.chat_id_) or 'المنشئ اساسي'
 elseif database:sismember(bot_id..'Constructor'..chat_id, user_id) then
@@ -999,7 +1024,7 @@ send(msg.chat_id_, msg.id_,' ✫∫ اصدار سورس كارزما \n ✫∫ �
 end
 if text == 'قناه تحديثات البوت ✫' and SudoBot(msg) then 
 database:del(bot_id..'Srt:Bot') 
-send(msg.chat_id_, msg.id_,' ✫∫ [تحديثات البوت](t.me/RIRRR9) \n ✫∫ [قناه السورس](t.me/RIRRR9)')
+send(msg.chat_id_, msg.id_,' ✫∫ [تحديثات البوت](t.me/GG_GGE) \n ✫∫ [قناه السورس](t.me/RIRRR9)')
 end
 if text == "ضع اسم للبوت ✫" and SudoBot(msg) then  
 database:setex(bot_id..'Set:Name:Bot'..msg.sender_user_id_,300,true) 
@@ -1600,7 +1625,7 @@ end
 end
 end
 if text and database:get(bot_id..'lock:Fars'..msg.chat_id_) and not Special(msg) then 
-list = {"ڄ","گ","که","پی","خسته","برم","راحتی","بیام","بپوشم","گرمه","چه","چ","ڬ","ٺ","چ","ڇ","ڿ","ڀ","ڎ","ݫ","ژ","ڟ","ݜ","ڸ","پ","۴","زدن","دخترا","دیوث","مک","زدن", "خالی بند","عزیزم خوبی","سلامت باشی","میخوام","سلام","خوببی","ميدم","کی اومدی","خوابیدین"}
+list = {"ڄ","گ","که","پی","خسته","برم","راحتی","بیام","بپوشم","گرمه","چه","چ","ڬ","ٺ","چ","ڇ","ڿ","ڀ","ڎ","ݫ","ژ","ڟ","ݜ","ڸ","پ","۴","زدن","دخترا","دیوث","مک","زدن","خالی بند","عزیزم خوبی","سلامت باشی","میخوام","خوببی","ميدم","کی اومدی","خوابیدین"}
 for k,v in pairs(list) do
 if string.find(text,v) ~= nil then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_}) 
@@ -2620,6 +2645,79 @@ tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(arg,dat
 send(msg.chat_id_, msg.id_,' ✫∫ بواسطه » ['..Rutba(msg.sender_user_id_,msg.chat_id_)..'](T.ME/'..(data.username_ or 'RIRRR9')..') \n ✫∫ تـم فتح المعرفات ')
 end,nil)   
 end
+if text == 'تفعيل نسبه الحب' and Manager(msg) then   
+if database:get(bot_id..'Cick:lov'..msg.chat_id_) then
+Text = ' ✫∫ تم تفعيل نسبه الحب'
+database:del(bot_id..'Cick:lov'..msg.chat_id_)  
+else
+Text = ' ✫∫ بالتاكيد تم تفعيل نسبه الحب'
+end
+send(msg.chat_id_, msg.id_,Text) 
+end
+if text == 'تعطيل نسبه الحب' and Manager(msg) then  
+if not database:get(bot_id..'Cick:lov'..msg.chat_id_) then
+database:set(bot_id..'Cick:lov'..msg.chat_id_,true)  
+Text = '\n ✫∫ تم تعطيل نسبه الحب'
+else
+Text = '\n ✫∫ بالتاكيد تم تعطيل نسبه الحب'
+end
+send(msg.chat_id_, msg.id_,Text) 
+end
+if text == 'تفعيل نسبه الرجوله' and Manager(msg) then   
+if database:get(bot_id..'Cick:rjo'..msg.chat_id_) then
+Text = ' ✫∫ تم تفعيل نسبه الرجوله'
+database:del(bot_id..'Cick:rjo'..msg.chat_id_)  
+else
+Text = ' ✫∫ بالتاكيد تم تفعيل الرجوله'
+end
+send(msg.chat_id_, msg.id_,Text) 
+end
+if text == 'تعطيل نسبه الرجوله' and Manager(msg) then  
+if not database:get(bot_id..'Cick:rjo'..msg.chat_id_) then
+database:set(bot_id..'Cick:rjo'..msg.chat_id_,true)  
+Text = '\n ✫∫ تم تعطيل نسبه الرجوله'
+else
+Text = '\n ✫∫ بالتاكيد تم تعطيل نسبه الرجوله'
+end
+send(msg.chat_id_, msg.id_,Text) 
+end
+if text == 'تفعيل نسبه الكره' and Manager(msg) then   
+if database:get(bot_id..'Cick:krh'..msg.chat_id_) then
+Text = ' ✫∫ تم تفعيل نسبه الكره'
+database:del(bot_id..'Cick:krh'..msg.chat_id_)  
+else
+Text = ' ✫∫ بالتاكيد تم تفعيل نسبه الكره'
+end
+send(msg.chat_id_, msg.id_,Text) 
+end
+if text == 'تعطيل نسبه الكره' and Manager(msg) then  
+if not database:get(bot_id..'Cick:krh'..msg.chat_id_) then
+database:set(bot_id..'Cick:krh'..msg.chat_id_,true)  
+Text = '\n ✫∫ تم تعطيل نسبه الكره'
+else
+Text = '\n ✫∫ بالتاكيد تم تعطيل نسبه الكره'
+end
+send(msg.chat_id_, msg.id_,Text) 
+end
+if text == 'تفعيل نسبه الانوثه' and Manager(msg) then   
+if database:get(bot_id..'Cick:ano'..msg.chat_id_) then
+Text = ' ✫∫ تم تفعيل نسبه الانوثه'
+database:del(bot_id..'Cick:ano'..msg.chat_id_)  
+else
+Text = ' ✫∫ بالتاكيد تم تفعيل الانوثه'
+end
+send(msg.chat_id_, msg.id_,Text) 
+end
+if text == 'تعطيل نسبه الانوثه' and Manager(msg) then  
+if not database:get(bot_id..'Cick:ano'..msg.chat_id_) then
+database:set(bot_id..'Cick:ano'..msg.chat_id_,true)  
+Text = '\n ✫∫ تم تعطيل نسبه الانوثه'
+else
+Text = '\n ✫∫ بالتاكيد تم تعطيل نسبه الانوثه'
+end
+send(msg.chat_id_, msg.id_,Text) 
+end
+
 if text == 'قفل التاك' and Mod(msg) and msg.reply_to_message_id_ == 0 then 
 database:set(bot_id.."lock:hashtak"..msg.chat_id_,'del')  
 tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(arg,data) 
@@ -3373,7 +3471,7 @@ t = " ✫∫ لا يوجد مطورين"
 end
 send(msg.chat_id_, msg.id_, t)
 end
-if text == "تاك للمشرفين" or text == "تاك المشرفين" and BasicConstructor(msg) then
+if text == "تاك للمشرفين" or text == "تاك المشرفين" and Manager(msg) then
 if database:get(bot_id.."VVVZVV:admin:Time"..msg.chat_id_) then 
 return
  send(msg.chat_id_, msg.id_,"انتظر دقيقه من فضلك")
@@ -8186,7 +8284,7 @@ send(msg.chat_id_,msg.id_,'✫∫ تم حذف {'..num..'}')
 database:setex(bot_id..'VVVZVV:Delete:Time'..msg.chat_id_..':'..msg.sender_user_id_,300,true)
 end
 end
-if (msg.content_.animation_) or (msg.content_.photo_) or (msg.content_.video_) or (msg.content_.document) or (msg.content_.sticker_) or (msg.content_.voice_) or (msg.content_.audio_) and msg.reply_to_message_id_ == 0 then      
+if (msg.content_.animation_) or (msg.content_.photo_) or (msg.content_.video_) or (msg.content_.document) or (msg.content_.sticker_) and msg.reply_to_message_id_ == 0 then
 database:sadd(bot_id.."VVVZVV:allM"..msg.chat_id_, msg.id_)
 end
 if text == ("امسح") and cleaner(msg) then  
@@ -9348,7 +9446,7 @@ local List = {
 👨‍👧|- ☆يوزرك #username 🎫
 💌|- ☆رسائلك #msgs 💌
 🎫|- ☆ايديك #id   🥇
-🎟|- ☆موقعك #stast 🌐 
+??|- ☆موقعك #stast 🌐 
 🤸‍♂|- ☆جفصاتك #edit  🌬
 🥉|- ☆تفاعلك #auto 🚀
 🏆|- ☆مجوهراتك #game 🕹
@@ -9777,6 +9875,11 @@ local Teext = text:match("^تغير رد المطور (.*)$")
 database:set(bot_id.."Sudo:Rd"..msg.chat_id_,Teext)
 send(msg.chat_id_, msg.id_," ✫∫ تم تغير رد المطور الى » "..Teext)
 end
+if text and text:match("^تغير رد المالك (.*)$") and Manager(msg) then
+local Teext = text:match("^تغير رد المالك (.*)$") 
+database:set(bot_id.."CoSu:Rd"..msg.chat_id_,Teext)
+send(msg.chat_id_, msg.id_," ✫∫ تم تغير رد المالك الى » "..Teext)
+end
 if text and text:match("^تغير رد منشئ الاساسي (.*)$") and Manager(msg) then
 local Teext = text:match("^تغير رد منشئ الاساسي (.*)$") 
 database:set(bot_id.."BasicConstructor:Rd"..msg.chat_id_,Teext)
@@ -10060,7 +10163,7 @@ Text = [[
 ✫∫ الجهات
 ✫∫ الاشعارات
 •━━━━━━━━━━━━━•ٴ
-彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9)➢
+彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9 )➢
 ]]
 send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
@@ -10107,8 +10210,13 @@ Text = [[
 ✫∫ زخرفه
 ✫∫ حساب العمر
 ✫∫ الابراج
+✫∫ الرجوله 
+✫∫ الانوثه 
+✫∫ الكره
+✫∫ الحب 
+✫∫ ءall
  •━━━━━━━━━━━━━•ٴ
-彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9)➢
+彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9 )➢
 ]]
 send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
@@ -10146,7 +10254,7 @@ Text = [[
 ✫∫ وصف
 ✫∫ تكرار + عدد
  •━━━━━━━━━━━━━•ٴ
-彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9)➢
+彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9 )➢
 ]]
 send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
@@ -10196,7 +10304,7 @@ Text = [[
 ✫∫ امر 
 ✫∫ الاوامر المضافه
 •━━━━━━━━━━━━━━•ٴ
-彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9)➢
+彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9 )➢
 ]]
 send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
@@ -10235,10 +10343,12 @@ Text = [[
 ✫∫ ادمن بكل الصلاحيات
 ✫∫ القيود
 ✫∫ تنزيل جميع الرتب
+✫∫ تنزيل الكل 
  •━━━━━━━━━━━━━━•ٴ
 ✫∫ اوامر التغير …
  •━━━━━━━━━━━━━━•ٴ
 ✫∫ تغير رد المطور + اسم
+✫∫ تغير رد المالك + اسم
 ✫∫ تغير رد منشئ الاساسي + اسم
 ✫∫ تغير رد المنشئ + اسم
 ✫∫ تغير رد المدير + اسم
@@ -10248,7 +10358,7 @@ Text = [[
 ✫∫ تغير امر الاوامر
 ✫∫ تغير امر م1 ~ الئ م10
  •━━━━━━━━━━━━━━•ٴ
-彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9)➢
+彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9 )➢
 ]]
 send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
@@ -10310,8 +10420,10 @@ Text = [[
 ✫∫ قائمه المنع
 ✫∫ نسبه الحب 
 ✫∫ نسبه رجوله
+✫∫ نسبه الكره
+✫∫ نسبه الانوثه
 •━━━━━━━━━━━━━•ٴ
-彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9)➢
+彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9 )➢
 ]]
 send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
@@ -10370,7 +10482,7 @@ Text = [[
 ✫∫ رفع + تنزيل ← الحاته
 ✫∫ تاك للحاتات
 •━━━━━━━━━━━━━•ٴ
-彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9)➢
+彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9 )➢
 ]]
 send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
@@ -10406,7 +10518,7 @@ Text = [[
 ✫∫ اذاعه 
 ✫∫ ردود المطور 
  •━━━━━━━━━━━━━•ٴ
-彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9)➢
+彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9 )➢
 ]]
 send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
@@ -10484,7 +10596,7 @@ Text = [[
 ✫∫ تنظيف المشتركين
 ✫∫ تنظيف الكروبات
 •━━━━━━━━━━━━━•ٴ
-彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9)➢
+彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9 )➢
 ]]
 send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
@@ -10518,7 +10630,7 @@ Text = [[
 ✫∫ شنو رئيك بهاي بالرد
 ✫∫ تحب هذا
 •━━━━━━━━━━━━━•ٴ
-彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9)➢
+彡 .[⌯ 𝙆𝙖𝙍𝙯𝙈𝙖](t.me/RIRRR9 )➢
 ]]
 send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
@@ -11175,7 +11287,7 @@ end
 
 if text == "شنو رئيك بهذا" or text == "شنو رئيك بهذ" then
 if not database:get(bot_id..'lock:add'..msg.chat_id_) then
-local texting = {"ادب سسز يباوع علي بنات 😂🥺"," مو خوش ولد 😶","زاحف وما احبه 😾😹"}
+local texting = {"ادب سسز يباوع علي بنات ??🥺"," مو خوش ولد 😶","زاحف وما احبه 😾😹"}
 send(msg.chat_id_, msg.id_, ''..texting[math.random(#texting)]..'')
 end
 end
@@ -11328,28 +11440,60 @@ if text and text:match('^'..Name_Bot..' ') then
 data.message_.content_.text_ = data.message_.content_.text_:gsub('^'..Name_Bot..' ','')
 end
 if text == "نسبه الحب" or text == "نسبه حب" and msg.reply_to_message_id_ ~= 0 and Addictive(msg) then
+if not database:get(bot_id..'Cick:lov'..msg.chat_id_) then
 database:set(bot_id..":"..msg.sender_user_id_..":lov_Bots"..msg.chat_id_,"sendlove")
 Text = 'ارسل اسمك واسم الشخص الثاني،  \n مثال اسد و لبوى'
 send(msg.chat_id_, msg.id_,Text) 
 end
+end
 if text and text ~="نسبه الحب" and database:get(bot_id..":"..msg.sender_user_id_..":lov_Bots"..msg.chat_id_) == "sendlove" then
-num = {"10","20","30","35","75","34","66","82","23","19","55","8","63","32","27","89","99","98","3","3","8","3","6","0",};
+num = {"10","20","30","35","75","34","66","82","23","19","55","8","63","32","27","89","99","98","3","80","49","100","6","0",};
 sendnum = num[math.random(#num)]
 sl = 'نسبه حب '..text..' هي : '..sendnum..'%'
 send(msg.chat_id_, msg.id_,sl) 
 database:del(bot_id..":"..msg.sender_user_id_..":lov_Bots"..msg.chat_id_)
 end
+if text == "نسبه الكره" or text == "نسبه كره" and msg.reply_to_message_id_ ~= 0 and Addictive(msg) then
+if not database:get(bot_id..'Cick:krh'..msg.chat_id_) then
+database:set(bot_id..":"..msg.sender_user_id_..":krh_Bots"..msg.chat_id_,"sendkrhe")
+Text = 'ارسل اسمك واسم الشخص الثاني،  \n مثال اسد و لبوى'
+send(msg.chat_id_, msg.id_,Text) 
+end
+end
+if text and text ~="نسبه الكره" and database:get(bot_id..":"..msg.sender_user_id_..":krh_Bots"..msg.chat_id_) == "sendkrhe" then
+num = {"10","20","30","35","75","34","66","82","23","19","55","8","63","32","27","89","99","98","3","80","8","100","6","0",};
+sendnum = num[math.random(#num)]
+sl = 'نسبه كره '..text..' هي : '..sendnum..'%'
+send(msg.chat_id_, msg.id_,sl) 
+database:del(bot_id..":"..msg.sender_user_id_..":krh_Bots"..msg.chat_id_)
+end
 if text == "نسبه رجوله" or text == "نسبه الرجوله" and msg.reply_to_message_id_ ~= 0 and Addictive(msg) then
+if not database:get(bot_id..'Cick:rjo'..msg.chat_id_) then
 database:set(bot_id..":"..msg.sender_user_id_..":rjo_Bots"..msg.chat_id_,"sendrjoe")
 Text = 'ارسل اسم الشخص الذي تريد قياس نسبه رجولته \n مثال امير'
 send(msg.chat_id_, msg.id_,Text) 
 end
+end
 if text and text ~="نسبه رجوله" and database:get(bot_id..":"..msg.sender_user_id_..":rjo_Bots"..msg.chat_id_) == "sendrjoe" then
-numj = {"10","20","30","35","75","34","66","82","23","19","55","8","63","32","27","89","99","98","3","3","8","3","6","0",};
+numj = {"10","20","30","35","75","34","66","82","23","19","55","80","63","32","27","89","99","98","79","100","8","3","6","0",};
 sendnuj = numj[math.random(#numj)]
 xl = 'نسبه رجوله '..text..' هي : \n '..sendnuj..'%'
 send(msg.chat_id_, msg.id_,xl) 
 database:del(bot_id..":"..msg.sender_user_id_..":rjo_Bots"..msg.chat_id_)
+end
+if text == "نسبه الانوثه" or text == "نسبه انوثه" and msg.reply_to_message_id_ ~= 0 and Addictive(msg) then
+if not database:get(bot_id..'Cick:ano'..msg.chat_id_) then
+database:set(bot_id..":"..msg.sender_user_id_..":ano_Bots"..msg.chat_id_,"sendanoe")
+Text = 'ارسل اسم الشخص الذي تريد قياس نسبه انوثتها \n مثال نونه'
+send(msg.chat_id_, msg.id_,Text) 
+end
+end
+if text and text ~="نسبه الانوثه" and database:get(bot_id..":"..msg.sender_user_id_..":ano_Bots"..msg.chat_id_) == "sendanoe" then
+numj = {"10","20","30","35","75","34","66","82","23","19","55","80","63","32","27","89","99","98","79","100","8","3","6","0",};
+sendnuj = numj[math.random(#numj)]
+xl = 'نسبه الانوثه '..text..' هي : \n '..sendnuj..'%'
+send(msg.chat_id_, msg.id_,xl) 
+database:del(bot_id..":"..msg.sender_user_id_..":ano_Bots"..msg.chat_id_)
 end
 --------------------------------------------------------------------------------------------------------------
 if msg.sender_user_id_ and Muted_User(msg.chat_id_,msg.sender_user_id_) then 
